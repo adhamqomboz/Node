@@ -3,19 +3,28 @@ const express = require("express");
 const server = express()
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb+srv://aabualqomboz_db_user:UE0T6vzd69Fc3BNV@cluster0.2p0t4v3.mongodb.net/?appName=Cluster0")
+
+const dns = require("node:dns")
+
+dns.setDefaultResultOrder("ipv4first")
+
+dns.setServers(["8.8.8.8"])
+
+require("dotenv").config();
+
+mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-        console.log("Connected Successfully")
+        console.log("Connected DB")
 
-    }).catch((error) => {
-        console.log("Error with connecting with the database", error)
+        server.listen(3000, () => {
+            console.log("Server running")
+        })
     })
-
+    .catch(err => {
+        console.log(err)
+    })
 server.use(express.json())
 
-server.listen(3000, () => {
-    console.log("I'm listening in port 3000")
-})
 
 server.get("/hello", (req, res) => {
     res.send("Hello adham")
@@ -79,4 +88,3 @@ server.get("/sayhello", (req, res) => {
         languge: "Arabic"
     })
 })
-
