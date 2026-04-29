@@ -4,6 +4,8 @@ const server = express()
 
 const mongoose = require("mongoose");
 
+const Article = require("./models/Article.js")
+
 const dns = require("node:dns")
 
 dns.setDefaultResultOrder("ipv4first")
@@ -88,3 +90,29 @@ server.get("/sayhello", (req, res) => {
         languge: "Arabic"
     })
 })
+
+server.post("/articles", async (req, res) => {
+    const newArticle = new Article();
+
+    const artTitle = req.body.articleTitle
+    const artBody = req.body.articleBody
+
+    res.send(artTitle +" " + artBody)
+    return;
+
+    newArticle.title = articleTitle;
+    newArticle.body = articleBody;
+    newArticle.NumberOfLikes = 100;
+    await newArticle.save()
+
+    res.json(newArticle)
+});
+
+
+
+
+
+
+
+
+
